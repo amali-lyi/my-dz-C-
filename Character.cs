@@ -1,35 +1,30 @@
-﻿namespace DotNetLessons;
+﻿namespace ConsoleGame;
 
-public partial class Character(int health, int damage)
+abstract class Character
 {
-    public Attribute Health { get; } = new(health);
-    public Attribute Damage { get; } = new(damage);
+    public string Name { get; set; }
+    public int Health { get; set; }
+    public int Damage { get; set; }
 
-    public void TakeDamage(int value)
+    public Character(string name, int health, int damage)
     {
-        if (value < 0)
-            throw new InvalidAttributeException(
-                "Health",
-                "Damage value cannot be negative."
-            );
-
-        Health.AddToBaseValue(-value);
+        Name = name;
+        Health = health;
+        Damage = damage;
     }
 
-    public void Heal(int value)
+    public virtual void TakeDamage(int damage)
     {
-        if (value < 0)
-            throw new InvalidAttributeException(
-                "Health",
-                "Heal value cannot be negative."
-            );
+        Health -= damage;
 
-        Health.AddToBaseValue(value);
+        if (Health <= 0)
+        {
+            Health = 0;
+            Console.WriteLine($"{Name} died");
+        }
     }
 
-    public void Deconstruct(out int health, out int damage)
-    {
-        health = Health.Value;
-        damage = Damage.Value;
-    }
+    public abstract void Attack();
+
+    public abstract void Attack(Character target);
 }
